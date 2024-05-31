@@ -695,8 +695,6 @@ require('lazy').setup {
   },
 
   -- { 'jmann345/onedark.nvim' },
-  -- { 'navarasu/onedark.nvim' },
-  --
   -- { EXAMPLE: from the lazy.nvim help txt file (leader sh is so goated)
   --   "folke/tokyonight.nvim",
   --   lazy = false, -- make sure we load this during startup if it is your main colorscheme
@@ -707,66 +705,7 @@ require('lazy').setup {
   --   end,
   -- },
   { 'folke/tokyonight.nvim' },
-  {
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'olimorris/onedarkpro.nvim',
-    lazy = false,
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    config = function()
-      -- require('onedark').setup {
-      --   style = 'darker',
-      -- }
-      -- local utils = require 'onedarkpro.utils'
-      local color = require 'onedarkpro.helpers'
-      local colors = color.get_colors()
-      -- require('onedarkpro').load()
-      require('onedarkpro').setup {
-        styles = {
-          types = 'NONE',
-          methods = 'NONE',
-          numbers = 'NONE',
-          strings = 'NONE',
-          comments = 'italic',
-          keywords = 'bold,italic',
-          constants = 'NONE',
-          functions = 'italic',
-          operators = 'NONE',
-          variables = 'NONE',
-          parameters = 'NONE',
-          conditionals = 'NONE',
-          virtual_text = 'NONE',
-        },
-        colors = {
-          onedark_vivid = {
-            bg = '#1e222a',
-          },
-        },
-        plugins = { neo_tree = true }, --was false
-        -- options = {
-        --   transparency = true,
-        --   -- window_unfocussed_color = false,
-        -- },
-        options = {
-          cursorline = true,
-        },
-        -- hlgroups = {
-        --   CursorLineNr = {
-        --     bg = '${cursorline}',
-        --     fg = '${blue}',
-        --     style = 'bold',
-        --   },
-        -- },
-      }
-      vim.cmd.colorscheme 'onedark_vivid'
-
-      -- -- You can configure highlights by doing something like:
-      -- vim.cmd.hi 'Comment gui=none'
-      vim.api.nvim_set_hl(0, 'CursorLineNr', {
-        bold = true,
-        fg = colors.white,
-      })
-    end,
-  },
+  -- Theming now in ui.lua
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 

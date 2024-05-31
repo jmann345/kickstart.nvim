@@ -1,130 +1,4 @@
-local function my_on_attach(bufnr)
-  local api = require 'nvim-tree.api'
-
-  local function edit_or_open()
-    local node = api.tree.get_node_under_cursor()
-    if node.nodes ~= nil then
-      -- expand or collapse folder
-      api.node.open.edit()
-    else
-      -- open file
-      api.node.open.edit()
-      -- Close the tree if file was opened
-      api.tree.close()
-    end
-  end
-
-  local function vsplit_preview()
-    local node = api.tree.get_node_under_cursor()
-
-    if node.nodes ~= nil then
-      -- expand or collapse folder
-      api.node.open.edit()
-    else
-      -- open file as vsplit
-      api.node.open.vertical()
-    end
-
-    -- Finally refocus on tree if it was lost
-    api.tree.focus()
-  end
-
-  local function opts(desc)
-    return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
-  end
-
-  -- default mappings
-  api.config.mappings.default_on_attach(bufnr)
-
-  -- custom mappings
-  vim.keymap.set('n', 'l', edit_or_open, opts 'Edit Or Open')
-  vim.keymap.set('n', 'L', vsplit_preview, opts 'Vsplit Preview')
-  vim.keymap.set('n', 'h', api.tree.close, opts 'Close')
-  vim.keymap.set('n', 'H', api.tree.collapse_all, opts 'Collapse All')
-  vim.keymap.set('n', '?', api.tree.toggle_help, opts 'Help')
-end
-
 return {
-  {
-    'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    opts = {
-      options = {
-        theme = 'onedark_vivid',
-        component_separators = { left = '|', right = '|' },
-        section_separators = { left = '', right = '' },
-      },
-      sections = {
-        lualine_b = {
-          { 'branch' },
-          {
-            'diff',
-            colored = true,
-            diff_color = {
-              added = { fg = '#89ca78' },
-              modified = { fg = '#61afef' },
-              removed = { fg = '#ef596f' },
-            },
-            symbols = { added = '+', modified = '~', removed = '-' },
-          },
-          { 'diagnostics' },
-        },
-      },
-    },
-  },
-  {
-    'nvim-tree/nvim-tree.lua',
-    version = '*',
-    lazy = false,
-    dependencies = {
-      'nvim-tree/nvim-web-devicons',
-    },
-    config = function()
-      require('nvim-tree').setup {
-        on_attach = my_on_attach,
-      }
-      vim.cmd [[
-          :hi NvimTreeFolderIcon        guifg=#61afef ctermfg=Blue
-          :hi NvimTreeFolderName        guifg=#61afef
-          :hi NvimTreeEmptyFolderName   guifg=#61afef
-          :hi NvimTreeOpenedFolderName  guifg=#61afef
-          :hi NvimTreeSymlinkFolderName guifg=#61afef
-      ]]
-    end,
-  },
-  {
-    'willothy/nvim-cokeline',
-    lazy = false,
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-tree/nvim-web-devicons',
-      'stevearc/resession.nvim', -- Optional, for persistent history
-    },
-    -- config = true,
-    config = function()
-      require('cokeline').setup {
-        default_hl = {
-          bg = function(buffer)
-            if buffer.is_focused then
-              return '#1f2329'
-            else
-              local hlgroups = require 'cokeline.hlgroups'
-              return hlgroups.get_hl_attr('ColorColumn', 'bg')
-            end
-          end,
-        },
-        sidebar = {
-          filetype = 'NvimTree',
-          components = {
-            {
-              text = '  NvimTree',
-              hl = { fg = '#7f8490', bg = '#31353f' },
-            },
-          },
-        },
-      }
-    end,
-  },
   {
     'mrcjkb/haskell-tools.nvim',
     version = '^3', -- Recommended
@@ -176,7 +50,7 @@ return {
           char = {
             highlight = { backdrop = false },
             jump_labels = true,
-            label = { exclude = 'hjkliardcypvsex' },
+            label = { exclude = 'hjklwoiardcypvsex' },
           },
         },
       }
@@ -184,7 +58,8 @@ return {
     opts = {},
     -- stylua: ignore
     keys = {
-      { "<leader>f", mode = { "n", "x", "o" }, function() require("flash").jump({search = { forward = true, wrap = false, multi_window = false },}) end, desc = "Flash" },
+      { "<leader>f", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      { "<leader>t", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
       { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
       { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
       { "<c-S>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
@@ -246,5 +121,22 @@ return {
         },
       }
     end,
+  },
+  {
+    'cbochs/grapple.nvim',
+    dependencies = {
+      { 'nvim-tree/nvim-web-devicons' },
+    },
+    opts = {
+      scope = 'git_branch',
+      icons = true,
+      quick_select = '123456789',
+    },
+    keys = {
+      { 'M', '<cmd>Grapple toggle<cr>', desc = 'Grapple toggle tag' },
+      { '<leader>m', '<cmd>Grapple toggle_tags<cr>', desc = 'Grapple open tags window' },
+      { '<leader>h', '<cmd>Grapple cycle_tags prev<cr>', desc = 'Go to previous tag' },
+      { '<leader>l', '<cmd>Grapple cycle_tags next<cr>', desc = 'Go to next tag' },
+    },
   },
 }

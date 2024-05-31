@@ -2,13 +2,31 @@ local map = vim.keymap.set
 local mapn = function(bind, cmd, opts)
   vim.keymap.set('n', bind, cmd, opts)
 end
-local opts = { noremap = true, silent = true }
+local opts = { noremap = true }
+--[[ 
+						*m[* *m]*
+m[  or  m]		Set the |'[| or |']| mark.  Useful when an operator is
+			to be simulated by multiple commands.  (does not move
+			the cursor, this is not a motion command).
+--]]
+mapn('H', "['", opts) -- fix this (use marks.nvim)
+mapn('L', "]'", opts) -- fix this (use marks.nvim)
+-- buffers
+mapn('<leader>1', '<cmd>BufferGoto 1<CR>', opts)
+mapn('<leader>2', '<cmd>BufferGoto 2<CR>', opts)
+mapn('<leader>3', '<cmd>BufferGoto 3<CR>', opts)
+mapn('<leader>4', '<cmd>BufferGoto 4<CR>', opts)
+mapn('<leader>5', '<cmd>BufferGoto 5<CR>', opts)
+mapn('<leader>6', '<cmd>BufferGoto 6<CR>', opts)
+mapn('<leader>7', '<cmd>BufferGoto 7<CR>', opts)
+mapn('<leader>8', '<cmd>BufferGoto 8<CR>', opts)
+mapn('<leader>9', '<cmd>BufferGoto 9<CR>', opts)
 map('n', '<C-s>', '<cmd>w<CR>', { desc = 'Exit terminal mode' })
-map('n', '<S-Tab>', '<Plug>(cokeline-focus-prev)', opts)
-map('n', '<Tab>', '<Plug>(cokeline-focus-next)', opts)
-map('n', '<Leader>p', '<Plug>(cokeline-switch-prev)', opts)
-map('n', '<Leader>n', '<Plug>(cokeline-switch-next)', opts)
-map('n', '<leader>x', '<cmd>bd<CR>', { desc = 'Close current buffer' })
+map('n', '<Tab>', '<cmd>BufferNext<CR>', opts)
+map('n', '<S-Tab>', '<cmd>BufferPrevious<CR>', opts)
+map('n', '<leader>n', '<cmd>BufferMoveNext<CR>', opts)
+map('n', '<leader>p', '<cmd>BufferMovePrevious<CR>', opts)
+map('n', '<leader>x', '<cmd>BufferClose<CR>', { desc = 'Close current buffer' })
 map('n', '<leader>q', '<cmd>q<CR>', { desc = 'Quit' })
 map('x', 'p', 'P', { desc = 'Disable yanking selected text in V mode' })
 vim.api.nvim_set_keymap('n', '<C-n>', ':NvimTreeToggle<cr>', opts)
@@ -38,7 +56,7 @@ mapn('<leader>dc', '<cmd>lua CopyDiagnosticMessage()<CR>', { desc = 'Copy diagno
 mapn('<leader>rcu', function()
   require('crates').upgrade_all_crates()
 end, { desc = 'Update crates' })
-mapn('<leader>gd', '<cmd>Glance definitions<CR>', { noremap = true, desc = 'Glance definitions' })
-mapn('<leader>gr', '<cmd>Glance references<CR>', { noremap = true, desc = 'Glance references' })
-mapn('<leader>gy', '<cmd>Glance type_definitions<CR>', { noremap = true, desc = 'Glance type definitions' })
-mapn('<leader>gm', '<cmd>Glance implementations<CR>', { noremap = true, desc = 'Glance implementations' })
+mapn('gd', '<cmd>Glance definitions<CR>', { noremap = true, desc = 'Glance definitions' })
+mapn('gr', '<cmd>Glance references<CR>', { noremap = true, desc = 'Glance references' })
+mapn('gy', '<cmd>Glance type_definitions<CR>', { noremap = true, desc = 'Glance type definitions' })
+mapn('gm', '<cmd>Glance implementations<CR>', { noremap = true, desc = 'Glance implementations' })
